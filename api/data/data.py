@@ -20,13 +20,22 @@ def load_data(file_name, data_url):
     return df
 
 
-def jsonify(df):
-    return Response(df.to_json(orient="records"), mimetype="application/json")
+def jsonify(df: pd.DataFrame, orient=None):
+    return Response(df.to_json(orient=orient), mimetype="application/json")
+
+
+def error_response():
+    return Response("Not found", status=400, mimetype="application/json")
 
 
 def get_skaters():
     df = load_data(skaters["file_name"], skaters["url"])
-    df = df.loc[df["situation"] == "all"]
-    df = df[["playerId", "name"]].head()
-    print(df)
-    return jsonify(df)
+    df = df[df["situation"] == "all"]
+    return df
+
+
+def get_player(player_id):
+    df = load_data(skaters["file_name"], skaters["url"])
+    df = df[df["situation"] == "all"]
+    df = df[df["playerId"] == player_id]
+    return df

@@ -1,6 +1,7 @@
 import { Box, CssBaseline } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import Drawer from "./components/Drawer";
+import { PlayersProvider } from "./data/PlayersContext";
 
 function App() {
   return (
@@ -8,7 +9,9 @@ function App() {
       <CssBaseline />
       <Box sx={{ display: "flex" }}>
         <Drawer />
-        <Outlet />
+        <PlayersProvider>
+          <Outlet />
+        </PlayersProvider>
       </Box>
     </>
   );

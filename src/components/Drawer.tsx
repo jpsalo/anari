@@ -4,7 +4,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { Link } from "react-router-dom";
-import { ROUTES } from "../utils/routes";
+import { RouteEnums, ROUTES } from "../utils/routes";
 
 const drawerWidth = 240;
 
@@ -23,15 +23,17 @@ export default function Drawer() {
       anchor="left"
     >
       <List>
-        {Object.keys(ROUTES).map((ROUTE) => (
-          <ListItem key={ROUTES[ROUTE].path} disablePadding>
-            <ListItemButton>
-              <Link to={ROUTES[ROUTE].path}>
-                <ListItemText primary={ROUTES[ROUTE].name} />
-              </Link>
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {Object.keys(ROUTES)
+          .filter((ROUTE) => ROUTES[ROUTE as RouteEnums].isMenuItem)
+          .map((ROUTE) => (
+            <ListItem key={ROUTES[ROUTE as RouteEnums].path} disablePadding>
+              <ListItemButton>
+                <Link to={ROUTES[ROUTE as RouteEnums].path}>
+                  <ListItemText primary={ROUTES[ROUTE as RouteEnums].name} />
+                </Link>
+              </ListItemButton>
+            </ListItem>
+          ))}
       </List>
     </MuiDrawer>
   );
