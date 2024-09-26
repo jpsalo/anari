@@ -10,7 +10,7 @@ app = Flask(__name__)
 def skaters():
     with app.app_context():
         df = get_skaters()
-        df = df[["playerId", "name"]].head()
+        df = df[["playerId", "name", "team"]].head()
         return jsonify(df, orient="records")
 
 
@@ -20,7 +20,7 @@ def player(player_id):
         df = get_player(int(player_id))
         if df.empty:
             return error_response()
-        df = df[["playerId", "name"]]
+        df = df[["playerId", "name", "team"]]
         # TODO: Endpoint for this
         df_all = get_skaters()
         nearest = find_nearest_pair(df_all, df.iloc[0]["playerId"])

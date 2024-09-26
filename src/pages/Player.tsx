@@ -1,13 +1,15 @@
+import { Avatar } from "@mui/material";
 import { useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  getSkater,
+  getSkaterDetails,
   PlayersActionType,
   PlayersContext,
   PlayersDispatch,
   PlayersDispatchContext,
 } from "../data/PlayersContext";
 import { ROUTES } from "../utils/routes";
+import LOGOS from "../data/logos";
 
 function Player() {
   const playersContext = useContext(PlayersContext);
@@ -22,7 +24,7 @@ function Player() {
   useEffect(() => {
     const loadSkaterDetails = async () => {
       try {
-        const skater = await getSkater(playerId);
+        const skater = await getSkaterDetails(playerId);
         dispatch({
           type: PlayersActionType.SET_SKATER_DETAILS,
           skaterDetail: skater,
@@ -35,10 +37,16 @@ function Player() {
     if (!playerDetails) loadSkaterDetails();
   }, [dispatch, navigate, playerDetails, playerId]);
 
+  if (!playerDetails) return <div>Loading...</div>; // TODO: add spinner
+
   return (
     <>
-      <div>{playerDetails?.name}</div>
-      <div>{playerDetails?.playerId}</div>
+      <div>{playerDetails.name}</div>
+      <div>{playerDetails.playerId}</div>
+      <div>{playerDetails.team}</div>
+      <Avatar src={LOGOS[playerDetails.team]} alt={playerDetails.team}>
+        {playerDetails.team}
+      </Avatar>
     </>
   );
 }

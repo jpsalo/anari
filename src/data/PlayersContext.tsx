@@ -1,10 +1,15 @@
 import { Dispatch, ReactNode } from "react";
 import { createContext, useReducer } from "react";
 
+export type TeamEnums = "COL" | "CAR";
+
 export type Skater = {
   playerId: number;
   name: string;
+  team: TeamEnums;
 };
+
+type SkaterDetails = Skater; // NOTE: Use same type for now
 
 export enum PlayersActionType {
   "SET_SKATERS" = "setSkaters",
@@ -12,7 +17,7 @@ export enum PlayersActionType {
 }
 
 type SkaterState = Skater;
-type SkaterDetailsState = Skater; // FIXME: real type
+type SkaterDetailsState = SkaterDetails;
 
 type PlayersDataState = {
   skaters: SkaterState[];
@@ -63,7 +68,7 @@ const playersReducer = (players: PlayersDataState, action: PlayersAction) => {
     }
     case PlayersActionType.SET_SKATER_DETAILS: {
       const { skaterDetails, ...rest } = players;
-      const hasSkaterDetails = skaterDetails.find(
+      const hasSkaterDetails = skaterDetails.some(
         (skater) => skater.playerId === action.skaterDetail.playerId,
       );
       return {
@@ -85,10 +90,12 @@ export const getSkaters = async (): Promise<Skater[]> => {
   return skaters;
 };
 
-export const getSkater = async (playerId: number): Promise<Skater> => {
+export const getSkaterDetails = async (
+  playerId: number,
+): Promise<SkaterDetails> => {
   const data = await fetch(`/players/${playerId}`);
   if (data.ok) {
-    const skater = (await data.json()) as Skater;
+    const skater = (await data.json()) as SkaterDetails;
     return skater;
   }
   throw new Error(/*TODO: pass api error*/);
