@@ -9,11 +9,14 @@ export type Skater = {
   team: TeamEnums;
 };
 
-type SkaterDetails = Skater; // NOTE: Use same type for now
+type SkaterDetails = Skater & {
+  nearestPlayersIds: number[];
+};
 
 export enum PlayersActionType {
   "SET_SKATERS" = "setSkaters",
   "SET_SKATER_DETAILS" = "setSkaterDetails",
+  "SET_NEAREST_PLAYERS" = "setNearestPlayers",
 }
 
 type SkaterState = Skater;
@@ -34,7 +37,16 @@ type SetSkaterDetailsAction = {
   skaterDetail: SkaterDetailsState;
 };
 
-type PlayersAction = SetSkatersAction | SetSkaterDetailsAction;
+type SetNearestPlayersAction = {
+  type: PlayersActionType.SET_NEAREST_PLAYERS;
+  playerId: number;
+  nearestPlayersIds: number[];
+};
+
+type PlayersAction =
+  | SetSkatersAction
+  | SetSkaterDetailsAction
+  | SetNearestPlayersAction;
 export type PlayersDispatch = Dispatch<PlayersAction>;
 
 export const PlayersContext = createContext<PlayersDataState | null>(null);
@@ -78,6 +90,18 @@ const playersReducer = (players: PlayersDataState, action: PlayersAction) => {
         ...rest,
       };
     }
+    case PlayersActionType.SET_NEAREST_PLAYERS: {
+      const { skaterDetails, ...rest } = players;
+      return {
+        skaterDetails: skaterDetails.map((skater) => {
+          if (skater.playerId === action.playerId) {
+            skater.nearestPlayersIds = action.nearestPlayersIds;
+          }
+          return skater;
+        }),
+        ...rest,
+      };
+    }
     default: {
       throw Error("Unknown action");
     }
@@ -97,6 +121,17 @@ export const getSkaterDetails = async (
   if (data.ok) {
     const skater = (await data.json()) as SkaterDetails;
     return skater;
+  }
+  throw new Error(/*TODO: pass api error*/);
+};
+
+export const getNearestPlayers = async (
+  playerId: number,
+): Promise<SkaterDetails[]> => {
+  const data = await fetch(`/players/${playerId}/nearest`);
+  if (data.ok) {
+    const nearestPlayers = (await data.json()) as SkaterDetails[];
+    return nearestPlayers;
   }
   throw new Error(/*TODO: pass api error*/);
 };
