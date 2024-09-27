@@ -25,6 +25,7 @@ def nearest(df: DataFrame, player_id) -> list[int]:
 
 
 def distance(row: DataFrame, b: DataFrame):
+    # FIXME: Causes SettingWithCopyWarning
     for i, item in enumerate(row):
         row.iloc[i] = abs(item - b.iat[0, i])
     row["sum"] = row.sum()
