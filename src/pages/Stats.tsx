@@ -19,7 +19,7 @@ function Stats() {
       return Object.entries(skater).map(([key, value]) => {
         let cell;
         if (key === "name") {
-          const link = `${ROUTES["PLAYERS"].path}/${skater["playerId"]}`;
+          const link = `${ROUTES.PLAYERS.path}/${skater.playerId}`;
           cell = createCell(value, link);
         } else {
           cell = createCell(value);
