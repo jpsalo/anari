@@ -31,11 +31,6 @@ def player(player_id):
 def nearest_players(player_id):
     with app.app_context():
         df_all = get_skaters()
-        nearest_ids_df = find_nearest_pair(df_all, int(player_id))
-        # NOTE: Perhaps this is not the best way to do this
-        nearest_df = nearest_ids_df.apply(
-            lambda row: get_player(row["playerId"]).iloc[0],
-            axis=1,
-        )
-        nearest_df = nearest_df[["playerId", "name", "team"]]
-        return jsonify(nearest_df, orient="records")
+        df = find_nearest_players(df_all, int(player_id))
+        df = df[["playerId", "name", "team"]]
+        return jsonify(df, orient="records")
