@@ -1,6 +1,14 @@
-import { Avatar, CircularProgress } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Card,
+  CardActionArea,
+  CardContent,
+  CircularProgress,
+  Stack,
+} from "@mui/material";
 import { useContext, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   getNearestPlayers,
   getSkaterDetails,
@@ -11,6 +19,7 @@ import {
 } from "../data/PlayersContext";
 import { ROUTES } from "../utils/routes";
 import LOGOS from "../data/logos";
+import "../App.css";
 
 function Player() {
   const playersContext = useContext(PlayersContext);
@@ -67,21 +76,32 @@ function Player() {
   if (!playerDetails) return <div>Loading...</div>;
 
   return (
-    <>
+    <Box>
       <div>{playerDetails.name}</div>
-      <div>{playerDetails.playerId}</div>
-      <div>{playerDetails.team}</div>
       <Avatar src={LOGOS[playerDetails.team]} alt={playerDetails.team}>
         {playerDetails.team}
       </Avatar>
       {nearestPlayerDetails ? (
-        nearestPlayerDetails.map((player) => (
-          <div key={player?.playerId}>{player?.name}</div>
-        ))
+        <Stack direction="row">
+          {nearestPlayerDetails.map((player) => (
+            <Card key={player?.playerId}>
+              <CardActionArea>
+                <Link
+                  to={`${ROUTES.PLAYERS.path}/${player?.playerId}`}
+                  className="unstyledLink"
+                >
+                  <CardContent>
+                    <div>{player?.name}</div>
+                  </CardContent>
+                </Link>
+              </CardActionArea>
+            </Card>
+          ))}
+        </Stack>
       ) : (
         <CircularProgress />
       )}
-    </>
+    </Box>
   );
 }
 
