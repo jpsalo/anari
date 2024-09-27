@@ -31,6 +31,8 @@ def error_response():
 def get_skaters():
     df = load_data(skaters["file_name"], skaters["url"])
     df = df[df["situation"] == "all"]
+    if current_app.config["FLASK_ENV"] == "development":
+        df = df.head(100).copy()
     return df
 
 

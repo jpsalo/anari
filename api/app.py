@@ -1,18 +1,19 @@
+import os
 from flask import Flask
-
-from player_comparison import find_nearest_pair
+from player_comparison import find_nearest_players
 from data.data import error_response, get_player, get_skaters, jsonify
 
 app = Flask(__name__)
-
-# TODO: if development: n_head = 20
+# https://flask.palletsprojects.com/en/2.3.x/cli/#environment-variables-from-dotenv
+# https://github.com/pallets/flask/pull/4995
+app.config["FLASK_ENV"] = os.getenv("FLASK_ENV")
 
 
 @app.route("/skaters")
 def skaters():
     with app.app_context():
         df = get_skaters()
-        df = df[["playerId", "name", "team"]].head(20)
+        df = df[["playerId", "name", "team"]]
         return jsonify(df, orient="records")
 
 
