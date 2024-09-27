@@ -5,12 +5,14 @@ from data.data import error_response, get_player, get_skaters, jsonify
 
 app = Flask(__name__)
 
+# TODO: if development: n_head = 20
+
 
 @app.route("/skaters")
 def skaters():
     with app.app_context():
         df = get_skaters()
-        df = df[["playerId", "name", "team"]].head()
+        df = df[["playerId", "name", "team"]].head(20)
         return jsonify(df, orient="records")
 
 

@@ -11,9 +11,8 @@ def find_nearest_pair(df: DataFrame, player_id):
     source_player_id_df = source_df["playerId"]
     source_df = source_df.drop("playerId", axis=1)
 
-    df = (
-        df.head()
-    )  # TODO: Set reasonable number for development environment (.flaskenv)
+    # TODO: Set reasonable number for development environment (.flaskenv)
+    df = df.head(20)
     df = df.select_dtypes(["number"]).reset_index(drop=True)
     player_id_df = df["playerId"]
     df = df.drop("playerId", axis=1)
