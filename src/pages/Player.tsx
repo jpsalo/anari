@@ -1,3 +1,9 @@
+import "../App.css";
+import LOGOS from "../data/logos";
+import { Helmet } from "react-helmet-async";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { ROUTES } from "../utils/routes";
+import { useContext, useEffect } from "react";
 import {
   Avatar,
   Box,
@@ -7,8 +13,6 @@ import {
   CircularProgress,
   Stack,
 } from "@mui/material";
-import { useContext, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   getNearestPlayers,
   getSkaterDetails,
@@ -17,9 +21,6 @@ import {
   PlayersDispatch,
   PlayersDispatchContext,
 } from "../data/PlayersContext";
-import { ROUTES } from "../utils/routes";
-import LOGOS from "../data/logos";
-import "../App.css";
 
 function Player() {
   const playersContext = useContext(PlayersContext);
@@ -76,32 +77,37 @@ function Player() {
   if (!playerDetails) return <div>Loading...</div>;
 
   return (
-    <Box>
-      <div>{playerDetails.name}</div>
-      <Avatar src={LOGOS[playerDetails.team]} alt={playerDetails.team}>
-        {playerDetails.team}
-      </Avatar>
-      {nearestPlayerDetails ? (
-        <Stack direction="row">
-          {nearestPlayerDetails.map((player) => (
-            <Card key={player?.playerId}>
-              <CardActionArea>
-                <Link
-                  to={`${ROUTES.PLAYERS.path}/${player?.playerId}`}
-                  className="unstyledLink"
-                >
-                  <CardContent>
-                    <div>{player?.name}</div>
-                  </CardContent>
-                </Link>
-              </CardActionArea>
-            </Card>
-          ))}
-        </Stack>
-      ) : (
-        <CircularProgress />
-      )}
-    </Box>
+    <>
+      <Helmet>
+        <title>{`Player: ${playerDetails.name}`}</title>
+      </Helmet>
+      <Box>
+        <div>{playerDetails.name}</div>
+        <Avatar src={LOGOS[playerDetails.team]} alt={playerDetails.team}>
+          {playerDetails.team}
+        </Avatar>
+        {nearestPlayerDetails ? (
+          <Stack direction="row">
+            {nearestPlayerDetails.map((player) => (
+              <Card key={player?.playerId}>
+                <CardActionArea>
+                  <Link
+                    to={`${ROUTES.PLAYERS.path}/${player?.playerId}`}
+                    className="unstyledLink"
+                  >
+                    <CardContent>
+                      <div>{player?.name}</div>
+                    </CardContent>
+                  </Link>
+                </CardActionArea>
+              </Card>
+            ))}
+          </Stack>
+        ) : (
+          <CircularProgress />
+        )}
+      </Box>
+    </>
   );
 }
 
