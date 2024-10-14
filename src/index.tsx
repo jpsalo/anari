@@ -8,6 +8,7 @@ import { ROUTES } from "./utils/routes";
 import Stats from "./pages/Stats";
 import ErrorPage from "./pages/ErrorPage";
 import Player from "./pages/Player";
+import Home from "./pages/Home";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: ROUTES.HOME.path,
-        element: <div>Home</div>,
+        element: <Home />,
       },
       {
         path: ROUTES.STATS.path,

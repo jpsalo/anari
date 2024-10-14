@@ -1,7 +1,7 @@
 from pandas import DataFrame
 import pandas as pd
 
-from data.data import get_player
+from data_utils import get_player
 
 
 def nearest(df: DataFrame, player_id) -> list[int]:
