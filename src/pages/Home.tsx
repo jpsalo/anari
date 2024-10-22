@@ -79,7 +79,7 @@ function Home() {
           <Stack direction="row" spacing={2} justifyContent="center">
             <TextField
               label="Ask a question"
-              placeholder="What kind of a season did Sam Reinhart have?"
+              placeholder="Provide me with a summary of NHL player statistics."
               variant="outlined"
               value={inputText}
               onChange={handleChange}
